@@ -1,0 +1,53 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+*.egg
+dist/
+build/
+.eggs/
+
+# Virtual environments
+venv/
+env/
+.venv/
+.env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Jupyter
+.ipynb_checkpoints/
+
+# ===== LARGE FILES (do NOT push to GitHub) =====
+
+# Trained model checkpoints (~830MB)
+results/*/models/*.pth
+
+# Dataset audio files (~1.6GB)
+Tabla-Taal-and-Bol-Identification/
+
+# User-uploaded test audio files
+*.wav
+*.mp3
+*.ogg
+*.flac
+*.m4a
+
+# ===== OS =====
+.DS_Store
+Thumbs.db
+
+# Gemini
+.gemini/
+
+# Temp files
+*.tmp
+*.temp
+*.log

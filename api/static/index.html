@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tabla Identifier — AI-Powered Taal & Bol Detection</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+        :root{--bg:#06070a;--card:rgba(15,18,30,.85);--border:rgba(100,120,200,.12);
+            --border-a:rgba(100,140,255,.35);--t1:#e8eaf0;--t2:#8b92a8;--t3:#555b70;
+            --blue:#4a7cff;--purple:#8b5cf6;--teal:#14b8a6;--amber:#f59e0b;--rose:#f43f5e;
+            --green:#22c55e;--grad:linear-gradient(135deg,#4a7cff,#8b5cf6);
+            --gt:linear-gradient(135deg,#14b8a6,#4a7cff);--gb:linear-gradient(135deg,#f59e0b,#f43f5e);
+            --r:16px;--rs:10px}
+        body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t1);min-height:100vh}
+        body::before{content:'';position:fixed;inset:-50%;width:200%;height:200%;
+            background:radial-gradient(ellipse at 30% 20%,rgba(74,124,255,.04) 0%,transparent 50%),
+            radial-gradient(ellipse at 70% 80%,rgba(139,92,246,.04) 0%,transparent 50%);z-index:-1}
+        .ctr{max-width:920px;margin:0 auto;padding:24px 20px 60px}
+        .hdr{text-align:center;padding:28px 0 20px}
+        .hdr h1{font-size:28px;font-weight:800;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+        .hdr p{color:var(--t2);font-size:13px;margin-top:4px}
+        .card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:22px;margin-bottom:14px;backdrop-filter:blur(20px)}
+        .card:hover{border-color:var(--border-a)}
+        .ct{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1.5px;color:var(--t3);margin-bottom:12px}
+        .uz{border:2px dashed rgba(100,120,200,.2);border-radius:var(--r);padding:36px 20px;text-align:center;cursor:pointer;transition:all .3s}
+        .uz:hover,.uz.drag{border-color:var(--blue);background:rgba(74,124,255,.03)}
+        .uz input{display:none}
+        .fi{display:none;align-items:center;gap:10px;padding:10px 14px;background:rgba(74,124,255,.06);border-radius:var(--rs);margin-top:10px}
+        .fi.v{display:flex}
+        .fi-n{font-weight:500;font-size:13px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+        .fi-s{font-size:11px;color:var(--t3)}
+        .fi-x{background:none;border:none;color:var(--t3);cursor:pointer;font-size:15px;padding:2px 6px;border-radius:6px}
+        .fi-x:hover{color:var(--rose)}
+        .ap{margin-top:8px;width:100%;display:none} .ap.v{display:block}
+        audio{width:100%;height:34px;border-radius:8px}
+        .btn{width:100%;padding:13px;border:none;border-radius:var(--rs);background:var(--grad);color:#fff;font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;transition:all .3s;position:relative;overflow:hidden}
+        .btn:hover{transform:translateY(-1px);box-shadow:0 8px 25px rgba(74,124,255,.25)}
+        .btn:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none}
+        .btn.ld{pointer-events:none}
+        .btn.ld::after{content:'';position:absolute;top:0;left:-100%;width:200%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.15),transparent);animation:sh 1.5s infinite}
+        @keyframes sh{to{left:100%}}
+        .sm{text-align:center;padding:10px;border-radius:var(--rs);font-size:12px;margin-bottom:12px;display:none}
+        .sm.v{display:block} .sm.err{background:rgba(244,63,94,.08);color:var(--rose);border:1px solid rgba(244,63,94,.15)}
+        .sm.ok{background:rgba(20,184,166,.08);color:var(--teal);border:1px solid rgba(20,184,166,.15)}
+        .res{display:none} .res.v{display:block}
+        .badge{display:inline-block;padding:4px 11px;border-radius:20px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#fff}
+        .b-taal{background:var(--gt)} .b-bol{background:var(--gb)}
+        .rmain{display:flex;align-items:center;gap:14px;padding:14px;background:rgba(74,124,255,.04);border-radius:var(--rs);margin:10px 0}
+        .rlbl{font-size:24px;font-weight:800}
+        .rconf{font-size:28px;font-weight:800;margin-left:auto;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+        .rsub{font-size:11px;color:var(--t3);margin-top:2px}
+        .rtime{font-size:10px;color:var(--t3);float:right}
+        /* Theka display */
+        .theka{padding:10px 14px;background:rgba(20,184,166,.06);border:1px solid rgba(20,184,166,.12);border-radius:var(--rs);margin:10px 0;font-size:13px;font-weight:500;color:var(--teal);letter-spacing:.3px}
+        .theka-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--t3);margin-bottom:4px}
+        /* Timeline */
+        .tl-hdr{display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap}
+        .tl-count{font-size:11px;color:var(--t3);margin-left:auto}
+        .tl-track{position:relative;width:100%;height:62px;background:rgba(255,255,255,.02);border-radius:var(--rs);margin-bottom:10px;overflow:hidden;cursor:pointer}
+        .tl-prog{position:absolute;top:0;left:0;height:100%;width:0;background:linear-gradient(90deg,rgba(245,158,11,.08),rgba(244,63,94,.08));transition:width .05s linear;pointer-events:none}
+        .tl-bol{position:absolute;top:0;height:100%;display:flex;align-items:center;justify-content:center;flex-direction:column;border-right:1px solid rgba(255,255,255,.06);transition:background .15s;min-width:28px}
+        .tl-bol:last-child{border-right:none}
+        .tl-bol.active{background:rgba(245,158,11,.15)}
+        .tl-bol-n{font-size:12px;font-weight:700;text-shadow:0 1px 4px rgba(0,0,0,.5)}
+        .tl-bol-c{font-size:8px;font-weight:600;margin-top:1px}
+        .tl-bol-t{font-size:7px;color:var(--t3);margin-top:1px}
+        /* Source colors */
+        .src-both .tl-bol-c{color:var(--green)} .src-template .tl-bol-c{color:var(--teal)} .src-model .tl-bol-c{color:var(--amber)}
+        /* Legend */
+        .legend{display:flex;gap:14px;margin-bottom:10px;flex-wrap:wrap}
+        .legend-item{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--t2)}
+        .legend-dot{width:8px;height:8px;border-radius:50%}
+        .dot-both{background:var(--green)} .dot-tmpl{background:var(--teal)} .dot-model{background:var(--amber)}
+        /* Bol chips */
+        .bl{display:flex;flex-wrap:wrap;gap:5px}
+        .bc{padding:5px 12px;border-radius:16px;font-size:11px;font-weight:600;background:rgba(255,255,255,.04);border:1px solid var(--border);transition:all .2s;color:var(--t2);position:relative}
+        .bc.active{border-color:var(--amber);color:var(--t1);box-shadow:0 0 10px rgba(245,158,11,.15)}
+        .bc-src{font-size:7px;position:absolute;top:-5px;right:-2px;padding:1px 4px;border-radius:6px;font-weight:700;color:#fff}
+        .bc-src.s-both{background:var(--green)} .bc-src.s-template{background:var(--teal)} .bc-src.s-model{background:var(--amber)}
+        /* Cycle divider */
+        .cycle-div{display:flex;align-items:center;gap:6px;font-size:9px;color:var(--t3);font-weight:600;text-transform:uppercase;letter-spacing:1px;width:100%;padding:4px 0}
+        .cycle-div::after{content:'';flex:1;height:1px;background:var(--border)}
+        /* Conf bars */
+        .cbars{display:flex;flex-direction:column;gap:5px;margin-top:8px}
+        .crow{display:flex;align-items:center;gap:8px;font-size:11px}
+        .cname{width:80px;font-weight:500;text-align:right;color:var(--t2);flex-shrink:0}
+        .cbg{flex:1;height:6px;background:rgba(255,255,255,.04);border-radius:3px;overflow:hidden}
+        .cbar{height:100%;border-radius:3px;background:var(--gt);transition:width .8s cubic-bezier(.22,1,.36,1);width:0}
+        .cval{width:42px;font-size:10px;color:var(--t3);font-weight:600}
+        .footer{text-align:center;padding:24px 0 8px;font-size:10px;color:var(--t3)}
+        .footer a{color:var(--blue);text-decoration:none}
+        @keyframes fu{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+        .anim{animation:fu .4s ease forwards}
+        @media(max-width:600px){.ctr{padding:12px 10px 32px}.hdr h1{font-size:22px}.card{padding:16px}
+            .rmain{flex-direction:column;text-align:center;gap:6px}.rconf{margin-left:0}.tl-bol-n{font-size:10px}}
+    </style>
+</head>
+<body>
+<div class="ctr">
+    <header class="hdr"><span style="font-size:40px;display:block;margin-bottom:4px">🥁</span>
+        <h1>Tabla Identifier</h1><p>AI-powered Taal & Bol detection from audio</p></header>
+    <div class="card">
+        <div class="ct">Upload Audio</div>
+        <div class="uz" id="uz"><span style="font-size:32px;display:block;margin-bottom:6px;opacity:.7">📁</span>
+            <div style="font-size:14px;font-weight:500">Drop audio file here or click to browse</div>
+            <div style="font-size:11px;color:var(--t3);margin-top:3px">WAV, MP3, OGG, FLAC, M4A</div>
+            <input type="file" id="fi" accept="audio/*"></div>
+        <div class="fi" id="fileInfo"><span>🎵</span><span class="fi-n" id="fn"></span>
+            <span class="fi-s" id="fs"></span><button class="fi-x" id="fx">✕</button></div>
+        <div class="ap" id="ap"><audio id="au" controls></audio></div>
+    </div>
+    <div class="card">
+        <div class="sm" id="sm"></div>
+        <button class="btn" id="btn" disabled>Analyze Tabla</button>
+    </div>
+    <div class="res" id="res">
+        <div class="card anim" id="taalCard" style="display:none">
+            <div style="display:flex;align-items:center;gap:8px">
+                <span class="badge b-taal">Taal Detected</span><span class="rtime" id="rtime"></span></div>
+            <div class="rmain"><div><div class="rlbl" id="tLbl"></div><div class="rsub" id="tSub"></div></div>
+                <div class="rconf" id="tConf"></div></div>
+            <div class="theka-label">Theka (Standard Pattern)</div>
+            <div class="theka" id="theka"></div>
+            <div class="cbars" id="tBars"></div>
+        </div>
+        <div class="card anim" id="bolCard" style="display:none">
+            <div class="tl-hdr">
+                <span class="badge b-bol">Bol Sequence</span>
+                <span class="tl-count" id="bCount"></span></div>
+            <div class="legend">
+                <div class="legend-item"><span class="legend-dot dot-both"></span>Template + Model agree</div>
+                <div class="legend-item"><span class="legend-dot dot-tmpl"></span>Template (from Taal pattern)</div>
+                <div class="legend-item"><span class="legend-dot dot-model"></span>Model (AI classification)</div>
+            </div>
+            <div class="tl-track" id="track"><div class="tl-prog" id="prog"></div></div>
+            <div class="bl" id="bl"></div>
+        </div>
+    </div>
+    <footer class="footer">Powered by ResidualCNN & CRNN · <a href="/docs">API Docs</a></footer>
+</div>
+<script>
+let file=null,seqData=null,raf=null;
+const $=id=>document.getElementById(id);
+const uz=$('uz'),fi=$('fi'),fn=$('fn'),fs=$('fs'),ap=$('ap'),au=$('au'),
+      btn=$('btn'),sm=$('sm'),res=$('res');
+
+uz.onclick=()=>fi.click();
+fi.onchange=e=>load(e.target.files[0]);
+uz.ondragover=e=>{e.preventDefault();uz.classList.add('drag')};
+uz.ondragleave=()=>uz.classList.remove('drag');
+uz.ondrop=e=>{e.preventDefault();uz.classList.remove('drag');e.dataTransfer.files.length&&load(e.dataTransfer.files[0])};
+$('fx').onclick=clear;
+
+function load(f){if(!f)return;file=f;fn.textContent=f.name;fs.textContent=fmt(f.size);
+    $('fileInfo').classList.add('v');uz.style.display='none';au.src=URL.createObjectURL(f);
+    ap.classList.add('v');btn.disabled=false;hide();res.classList.remove('v');stop();}
+function clear(){file=null;fi.value='';$('fileInfo').classList.remove('v');ap.classList.remove('v');
+    au.src='';uz.style.display='';btn.disabled=true;res.classList.remove('v');hide();stop();}
+function fmt(b){return b<1024?b+' B':b<1048576?(b/1024).toFixed(1)+' KB':(b/1048576).toFixed(1)+' MB'}
+
+btn.onclick=analyze;
+async function analyze(){if(!file)return;btn.disabled=true;btn.classList.add('ld');btn.textContent='Analyzing...';
+    res.classList.remove('v');hide();stop();
+    const fd=new FormData();fd.append('file',file);
+    try{const r=await fetch('/api/v1/predict/sequence',{method:'POST',body:fd});
+        if(!r.ok){const e=await r.json();throw new Error(e.detail||'Failed')}
+        show(await r.json());
+    }catch(e){msg(e.message,'err')}
+    finally{btn.disabled=false;btn.classList.remove('ld');btn.textContent='Analyze Tabla'}}
+
+function show(d){seqData=d;res.classList.add('v');
+    // Taal
+    const tc=$('taalCard');
+    if(d.taal){tc.style.display='';
+        $('tLbl').textContent=d.taal.display_name;
+        $('tConf').textContent=(d.taal.confidence*100).toFixed(1)+'%';
+        $('rtime').textContent=d.processing_time_ms.toFixed(0)+'ms';
+        const top=d.taal.top_k[0];
+        $('tSub').textContent=top.beats?`${top.beats} beats · Vibhag: ${top.vibhag}`:'';
+        $('theka').textContent=d.theka||'';
+        bars('tBars',d.taal.top_k.slice(0,5));
+    }else tc.style.display='none';
+    // Bol sequence
+    const bc=$('bolCard');
+    if(d.bol_sequence&&d.bol_sequence.length){bc.style.display='';
+        const cyc=d.cycles_detected||1;
+        $('bCount').textContent=`${d.bol_count} strokes · ${cyc} cycle${cyc>1?'s':''} · ${d.pattern_length} beats/cycle`;
+        timeline(d.bol_sequence,d.audio_info.duration_seconds);
+        chips(d.bol_sequence);
+        sync(d.bol_sequence,d.audio_info.duration_seconds);
+    }else bc.style.display='none';
+    msg(`Done in ${d.processing_time_ms.toFixed(0)}ms · ${d.bol_count} Bols · ${d.audio_info.duration_seconds}s audio`,'ok');
+}
+
+function timeline(seq,dur){const tr=$('track');
+    tr.innerHTML='<div class="tl-prog" id="prog"></div>';
+    seq.forEach((s,i)=>{const l=(s.time/dur)*100,w=((s.end_time-s.time)/dur)*100;
+        const el=document.createElement('div');
+        el.className=`tl-bol src-${s.source}`;el.dataset.i=i;
+        el.style.left=l+'%';el.style.width=Math.max(w,3)+'%';
+        el.innerHTML=`<span class="tl-bol-n">${s.bol}</span>
+            <span class="tl-bol-c">${(s.confidence*100).toFixed(0)}%</span>
+            <span class="tl-bol-t">${s.time.toFixed(2)}s</span>`;
+        tr.appendChild(el);});}
+
+function chips(seq){const bl=$('bl');bl.innerHTML='';let lastCyc=0;
+    seq.forEach((s,i)=>{
+        if(s.cycle!==lastCyc){lastCyc=s.cycle;
+            const div=document.createElement('div');div.className='cycle-div';
+            div.textContent=`Cycle ${s.cycle}`;bl.appendChild(div);}
+        const c=document.createElement('span');c.className='bc';c.dataset.i=i;
+        c.textContent=s.bol;
+        const src=document.createElement('span');
+        src.className=`bc-src s-${s.source}`;
+        src.textContent=s.source==='both'?'✓':s.source==='template'?'T':'M';
+        c.appendChild(src);
+        bl.appendChild(c);});}
+
+function sync(seq,dur){stop();const bols=document.querySelectorAll('.tl-bol'),
+    chips=document.querySelectorAll('.bc');let last=-1;
+    function tick(){const t=au.currentTime,p=(t/dur)*100;
+        $('prog').style.width=Math.min(p,100)+'%';
+        let a=-1;for(let i=seq.length-1;i>=0;i--)if(t>=seq[i].time-.02){a=i;break}
+        if(a!==last){bols.forEach(e=>e.classList.remove('active'));
+            chips.forEach(e=>e.classList.remove('active'));
+            if(a>=0){bols[a]?.classList.add('active');chips[a]?.classList.add('active');
+                chips[a]?.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'})}
+            last=a}
+        raf=requestAnimationFrame(tick)}
+    raf=requestAnimationFrame(tick)}
+function stop(){if(raf){cancelAnimationFrame(raf);raf=null}}
+
+$('track')?.addEventListener('click',e=>{if(!seqData)return;
+    const r=e.currentTarget.getBoundingClientRect();
+    au.currentTime=(e.clientX-r.left)/r.width*seqData.audio_info.duration_seconds;
+    if(au.paused)au.play()});
+
+function bars(id,items){const c=$(id);c.innerHTML='';const mx=items[0]?.confidence||1;
+    items.forEach((it,i)=>{const p=it.confidence*100,w=Math.max(1,(it.confidence/mx)*100);
+        const r=document.createElement('div');r.className='crow';
+        r.innerHTML=`<span class="cname">${it.display_name}</span>
+            <div class="cbg"><div class="cbar" style="width:0"></div></div>
+            <span class="cval">${p.toFixed(1)}%</span>`;
+        c.appendChild(r);
+        requestAnimationFrame(()=>setTimeout(()=>r.querySelector('.cbar').style.width=w+'%',50*i))})}
+
+function msg(t,type){sm.textContent=t;sm.className=`sm v ${type}`}
+function hide(){sm.className='sm'}
+</script>
+</body>
+</html>
