@@ -77,47 +77,47 @@ The system uses **4 custom neural network architectures** trained with **5-fold 
 │                                │                                 │
 │                                ▼                                 │
 │  ┌──────────────────────────────────────────────────┐            │
-│  │          DATA AUGMENTATION (Training Only)        │            │
-│  │                                                   │            │
-│  │  Waveform Level (×5 copies per original):         │            │
-│  │   • Gaussian Noise (70% chance, σ=0.002-0.008)    │            │
-│  │   • Random Gain (60% chance, ±6 dB)               │            │
-│  │   • Time Shift (50% chance, ±15%)                 │            │
-│  │                                                   │            │
-│  │  Spectrogram Level (on-the-fly, every epoch):     │            │
-│  │   • SpecAugment: 2 freq masks (20 bands)          │            │
-│  │   • SpecAugment: 2 time masks (30 frames)         │            │
-│  │                                                   │            │
-│  │  Batch Level (every batch):                       │            │
-│  │   • Mixup (α=0.3, Beta distribution)              │            │
+│  │          DATA AUGMENTATION (Training Only)       │            │
+│  │                                                  │            │
+│  │  Waveform Level (×5 copies per original):        │            │
+│  │   • Gaussian Noise (70% chance, σ=0.002-0.008)   │            │
+│  │   • Random Gain (60% chance, ±6 dB)              │            │
+│  │   • Time Shift (50% chance, ±15%)                │            │
+│  │                                                  │            │
+│  │  Spectrogram Level (on-the-fly, every epoch):    │            │
+│  │   • SpecAugment: 2 freq masks (20 bands)         │            │
+│  │   • SpecAugment: 2 time masks (30 frames)        │            │
+│  │                                                  │            │
+│  │  Batch Level (every batch):                      │            │
+│  │   • Mixup (α=0.3, Beta distribution)             │            │
 │  └──────────────────────────────────────────────────┘            │
 │                                │                                 │
 │                                ▼                                 │
 │  ┌──────────────────────────────────────────────────┐            │
-│  │           MEL SPECTROGRAM EXTRACTION              │            │
-│  │                                                   │            │
-│  │  n_fft=2048, hop_length=512, n_mels=128           │            │
-│  │  Power → dB scale → Zero-mean, Unit-variance      │            │
-│  │  Output: (1, 128, T) — like a grayscale image     │            │
+│  │           MEL SPECTROGRAM EXTRACTION             │            │
+│  │                                                  │            │
+│  │  n_fft=2048, hop_length=512, n_mels=128          │            │
+│  │  Power → dB scale → Zero-mean, Unit-variance     │            │
+│  │  Output: (1, 128, T) — like a grayscale image    │            │
 │  └──────────────────────────────────────────────────┘            │
 │                                │                                 │
 │                                ▼                                 │
 │  ┌──────────────────────────────────────────────────┐            │
-│  │              4 MODEL ARCHITECTURES                │            │
-│  │                                                   │            │
-│  │  1. ResidualCNN  — ResNet-style skip connections   │            │
-│  │  2. CRNN         — CNN + Bidirectional LSTM        │            │
-│  │  3. AttentionCRNN— CRNN + Multi-Head Attention     │            │
-│  │  4. ASTLite      — Vision Transformer for Audio    │            │
+│  │              4 MODEL ARCHITECTURES               │            │
+│  │                                                  │            │
+│  │  1. ResidualCNN  — ResNet-style skip connections │            │
+│  │  2. CRNN         — CNN + Bidirectional LSTM      │            │
+│  │  3. AttentionCRNN— CRNN + Multi-Head Attention   │            │
+│  │  4. ASTLite      — Vision Transformer for Audio  │            │
 │  └──────────────────────────────────────────────────┘            │
 │                                │                                 │
 │                                ▼                                 │
 │  ┌──────────────────────────────────────────────────┐            │
-│  │         5-FOLD CROSS-VALIDATION                   │            │
-│  │                                                   │            │
-│  │  Stratified split → Train on 80%, Validate 20%    │            │
-│  │  × 5 folds = every sample validated exactly once   │            │
-│  │  Best fold checkpoint saved per model              │            │
+│  │         5-FOLD CROSS-VALIDATION                  │            │
+│  │                                                  │            │
+│  │  Stratified split → Train on 80%, Validate 20%   │            │
+│  │  × 5 folds = every sample validated exactly once │            │
+│  │  Best fold checkpoint saved per model            │            │
 │  └──────────────────────────────────────────────────┘            │
 └──────────────────────────────────────────────────────────────────┘
 
@@ -142,9 +142,9 @@ The system uses **4 custom neural network architectures** trained with **5-fold 
 │       │              (ResidualCNN model)                         │
 │       │                                                          │
 │       └──────── Cross-Validation                                 │
-│                  Template Bol vs Model Bol                        │
+│                  Template Bol vs Model Bol                       │
 │                  → Combined confidence score                     │
-│                  → Source attribution (both/template/model)       │
+│                  → Source attribution (both/template/model)      │
 │                                                                  │
 │  Output: Timestamped Bol sequence synced with audio playback     │
 └──────────────────────────────────────────────────────────────────┘
