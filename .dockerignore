@@ -1,0 +1,20 @@
+# Dependencies & build
+node_modules/
+venv/
+__pycache__/
+*.pyc
+.git/
+.DS_Store
+
+# Dataset (not needed for inference)
+Tabla-Taal-and-Bol-Identification/
+
+# Mobile app (not needed in API container)
+mobile/
+
+# Dev files
+*.md
+*.pdf
+dadra-taal-beat.wav
+.gitignore
+.expo/

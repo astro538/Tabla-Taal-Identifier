@@ -29,7 +29,7 @@ env/
 
 # Trained model checkpoints (~830MB)
 results/*/models/*.pth
-
+results_white
 # Dataset audio files (~1.6GB)
 Tabla-Taal-and-Bol-Identification/
 

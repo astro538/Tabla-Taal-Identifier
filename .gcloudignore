@@ -1,0 +1,39 @@
+# Cloud Build ignore file
+# NOTE: This overrides .gitignore for gcloud builds
+
+# Python
+__pycache__/
+*.pyc
+*.egg-info/
+venv/
+.venv/
+
+# IDE
+.vscode/
+.idea/
+
+# Dataset (not needed for inference — saves ~1.5GB upload)
+Tabla-Taal-and-Bol-Identification/
+
+# Mobile app (not needed in API container)
+mobile/
+node_modules/
+
+# Dev files
+.git/
+.DS_Store
+*.md
+*.pdf
+.gemini/
+.expo/
+
+# Exclude ALL model checkpoints EXCEPT the ones we need
+results/bol/models/ASTLite_*
+results/bol/models/AttentionCRNN_*
+results/bol/models/CRNN_*
+results/taal/models/ASTLite_*
+results/taal/models/AttentionCRNN_*
+results/taal/models/ResidualCNN_*
+
+# Keep: results/bol/models/ResidualCNN_* (for Bol inference)
+# Keep: results/taal/models/CRNN_* (for Taal inference)
