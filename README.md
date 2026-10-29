@@ -176,7 +176,7 @@ TAL-Identifier/
 │
 ├── results/                      # Training outputs
 │   ├── bol/
-│   │   ├── models/               # 20 model checkpoints (4 models × 5 folds)
+│   │   ├── models/               # Generated locally during training; not included in the tracked file list
 │   │   ├── results.json          # Detailed metrics, confusion matrices
 │   │   ├── results.csv           # Summary table
 │   │   ├── training_curves.png   # Loss & accuracy per epoch
@@ -186,8 +186,8 @@ TAL-Identifier/
 │   ├── taal/                     # Same structure as bol/
 │   └── final_comparison.png
 │
-└── Tabla-Taal-and-Bol-Identification/
-    └── Dataset/
+└── Dataset/                     # Expected local data directory; recordings are not included in this GitHub tree
+    
         ├── Bols/                 # 8 classes × 100 files each
         │   ├── dha/  dhin/  ga/  ka/  t/  ta/  tin/  tit/
         └── Taals/                # 8 classes × 100 files each
@@ -208,8 +208,8 @@ TAL-Identifier/
 ### Setup
 
 ```bash
-git clone https://github.com/yourusername/TAL-Identifier.git
-cd TAL-Identifier
+git clone https://github.com/astro538/Tabla-Taal-Identifier.git
+cd Tabla-Taal-Identifier
 
 # Create virtual environment (recommended)
 python3 -m venv venv
@@ -271,7 +271,7 @@ curl -X POST http://localhost:8000/api/v1/predict/sequence \
 
 ## Dataset
 
-**Source**: [Tabla-Taal-and-Bol-Identification](https://github.com/relevant-repo) dataset with 1,600 WAV files.
+**Dataset availability:** the training dataset directory shown below is not present in the tracked repository tree. A fresh clone therefore does not include the 1,600 audio files. Supply the dataset locally before training, and replace this note with its actual source and license if the recordings can be publicly shared.
 
 | Property | Bols | Taals |
 |----------|------|-------|
@@ -748,7 +748,7 @@ The web interface at `http://localhost:8000` provides:
 |:------:|:------:|:------:|:------:|:------:|:----:|:---:|
 | 97.5% | 99.4% | 96.9% | 98.1% | 97.5% | 97.88% | 0.85% |
 
-Low standard deviation (0.85%) confirms results are stable across data splits — no data leakage.
+The low standard deviation (0.85%) indicates similar performance across the five recorded folds. This alone does **not** prove that data leakage is absent; for recordings from repeated sessions or performers, use participant- or session-independent evaluation where appropriate.
 
 ### Where the Bol Model Struggles
 
@@ -790,6 +790,6 @@ This project is for educational and research purposes.
 
 ## Acknowledgments
 
-- Dataset from [Tabla-Taal-and-Bol-Identification](https://github.com/relevant-repo)
+- Training recordings: the dataset location and license still need to be documented before redistributing them.
 - Inspired by the Tarang Report on Tabla classification
 - Model architectures inspired by ResNet, CRNN, AST research papers
