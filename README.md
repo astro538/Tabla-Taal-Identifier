@@ -155,7 +155,7 @@ The system uses **4 custom neural network architectures** trained with **5-fold 
 ## Project Structure
 
 ```
-TAL-Identifier/
+Tabla-Taal-Identifier/
 │
 ├── src/                          # Core ML source code
 │   ├── config.py                 # All hyperparameters & settings
